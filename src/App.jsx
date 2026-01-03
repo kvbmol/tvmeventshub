@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import EventList from './features/events/pages/EventList.jsx'
 import EventDetail from './features/events/pages/EventDetail.jsx';
+import EventFilters from './features/events/components/EventFilters.jsx';
 
 
 function App() {
@@ -28,6 +29,8 @@ function App() {
         {/* Main Content */}
         <main>
           <Routes>
+{/* <Route path='/' element={<EventFilters />} /> */}
+
             <Route path="/" element={<EventList />} />
            <Route path="/events/:id" element={<EventDetail />} />
           

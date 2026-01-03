@@ -1,70 +1,60 @@
 import React, { useState, useId } from 'react';
-// Remove ChevronDownIcon import if not used (avoids install error)
+import { ChevronDownIcon } from 'lucide-react';
 
-const EventFilters = ({ 
-  filters = { category: '', dateFrom: '', location: '', priceMax: '5000' }, 
-  setFilters = () => {}, 
-  categories = ['Tech', 'Music', 'Food', 'Sports'], 
-  prices = [0, 500, 1000, 2000] 
-}) => {
-  const safeFilters = filters || {}; // Double safety
+const EventFilters = ({ filters, setFilters, categories = ['Tech', 'Music', 'Food', 'Sports'], prices = [0, 500, 1000, 2000] }) => {
   const dateId = useId();
-
-  const updateFilter = (key, value) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
-  };
 
   return (
     <form className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg mb-8 border border-white/50">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Category */}
-        <div>
+        {/* <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
           <select 
-            value={safeFilters.category || ''} 
-            onChange={(e) => updateFilter('category', e.target.value)}
+            value={filters.category} 
+            onChange={(e) => setFilters({ ...filters, category: e.target.value })}
             className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
           >
             <option value="">All</option>
             {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
           </select>
-        </div>
+        </div> */}
 
         {/* Date Range */}
-        <div>
+        {/* <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Date</label>
           <input 
             type="date" 
-            value={safeFilters.dateFrom || ''} 
-            onChange={(e) => updateFilter('dateFrom', e.target.value)}
+            value={filters.dateFrom} 
+            onChange={(e) => setFilters({ ...filters, dateFrom: e.target.value })}
             className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500"
           />
         </div>
 
         {/* Location */}
-        <div>
+        {/* <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
           <input 
             type="text" 
             placeholder="e.g., Kazhakkoottam" 
-            value={safeFilters.location || ''} 
-            onChange={(e) => updateFilter('location', e.target.value.toLowerCase())}
+            value={filters.location} 
+            onChange={(e) => setFilters({ ...filters, location: e.target.value.toLowerCase() })}
             className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500"
           />
-        </div>
+        </div> */}
 
         {/* Price */}
-        <div>
+        {/* <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Max Price (₹)</label>
           <select 
-            value={safeFilters.priceMax || '5000'} 
-            onChange={(e) => updateFilter('priceMax', e.target.value)}
+            value={filters.priceMax} 
+            onChange={(e) => setFilters({ ...filters, priceMax: e.target.value })}
             className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500"
           >
             <option value={5000}>Any</option>
             {prices.map(p => <option key={p} value={p}>₹{p}</option>)}
           </select>
-        </div>
+        </div>  */}
       </div>
       <button 
         type="button"

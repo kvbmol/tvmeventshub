@@ -7,6 +7,7 @@ import EventList from "./features/events/pages/EventList";
 import EventDetail from "./features/events/pages/EventDetail";
 import CalendarPage from './features/events/pages/CalendarPage'; 
 import MapPage from "./features/events/pages/MapPage";
+import BookmarksPage from "./features/events/pages/BookmarksPage";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/schedule" element={<CalendarPage />} />
             <Route path="/" element={<EventList />} />
             <Route path="/events/:id" element={<EventDetail />} />
+            <Route path="/bookmarks" element={<BookmarksPage />} />
           </Routes>
         </main>
 

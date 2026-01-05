@@ -5,6 +5,8 @@ import Header from "./layout/Header";
 import Footer from "./layout/Footer";
 import EventList from "./features/events/pages/EventList";
 import EventDetail from "./features/events/pages/EventDetail";
+import CalendarPage from './features/events/pages/CalendarPage'; 
+import MapPage from "./features/events/pages/MapPage";
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
 
         <main className="flex-1">
           <Routes>
+            <Route path="/map" element={<MapPage />} />
+            <Route path="/schedule" element={<CalendarPage />} />
             <Route path="/" element={<EventList />} />
             <Route path="/events/:id" element={<EventDetail />} />
           </Routes>

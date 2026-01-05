@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Star, StarOff } from 'lucide-react'; 
 
 const EventCard = ({ event }) => {
+  const [isBookmarked, setIsBookmarked] = useState(false);
   const formatDateRange = (start) => {
     const date = new Date(start);
     return date.toLocaleDateString('en-IN', { 
@@ -13,7 +15,22 @@ const EventCard = ({ event }) => {
       hour12: true 
     });
   };
-
+useEffect(() => {
+  const saved = JSON.parse(localStorage.getItem('tvmevents-bookmarks') || '[]');
+  setIsBookmarked(saved.includes(event.id));
+}, [event.id]);
+  const toggleBookmark = (e) => {
+    e.preventDefault();
+    const saved = JSON.parse(localStorage.getItem('tvmevents-bookmarks') || '[]');
+    let updated;
+    if (isBookmarked) {
+      updated = saved.filter(id => id !== event.id);
+    } else {
+      updated = [...saved, event.id];
+    }
+    localStorage.setItem('tvmevents-bookmarks', JSON.stringify(updated));
+    setIsBookmarked(!isBookmarked);
+  };
   const formatLocation = (location) => location.split(',')[0];
 
   return (

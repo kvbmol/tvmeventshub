@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import EventFilters from "../components/EventFilters";
-
+import EventCalendar from '../components/EventCalendar';
 const events = [
   {
     id: 1,
@@ -10,6 +10,7 @@ const events = [
     category: 'Tech',
     dateStart: '2026-01-20T18:30:00',
     location: 'Technopark, Trivandrum',
+    lat: 8.9097, lng: 76.8631,
     rsvps: 34,
     image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=500',
     organizer: 'AWS User Group',
@@ -22,6 +23,7 @@ const events = [
     category: 'Career',
     dateStart: '2026-01-15T19:00:00',
     location: 'Kazhakkoottam Hall',
+    lat: 8.5560, lng: 76.8817,
     rsvps: 28,
     image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500',
     organizer: 'Startup Kerala',
@@ -58,6 +60,7 @@ const events = [
     category: 'Music',
     dateStart: '2026-01-18T17:00:00',
     location: 'Kazhakkoottam Open Ground',
+    lat: 8.5241, lng: 76.9366, 
     rsvps: 156,
     image: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=500',
     organizer: 'Tvm Cultural Fest',
@@ -249,6 +252,12 @@ return (
         )}
       </div>
     </section>
+    {/* <section className="mt-12">
+        <h2 className="text-2xl font-bold mb-4">Calendar View</h2>
+        <div className="bg-gradient-to-br from-slate-50 to-white rounded-3xl p-6 shadow-lg">
+          <EventCalendar events={events} />
+        </div>
+      </section> */}
   </div>
 )};
 export default EventList

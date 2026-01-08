@@ -1,21 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Star, StarOff } from 'lucide-react'; 
+
+import { StarIcon } from '@heroicons/react/24/solid';      // Filled ★
+import { StarIcon as StarOutlineIcon } from '@heroicons/react/24/outline';  // Outline ☆
+import { Share } from 'lucide-react';
 
 const EventCard = ({ event }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
-
-  const formatDateRange = (start) => {
-    const date = new Date(start);
-    return date.toLocaleDateString('en-IN', { 
-      weekday: 'short', 
-      day: 'numeric', 
-      month: 'short', 
-      hour: 'numeric', 
-      minute: '2-digit',
-      hour12: true 
-    });
-  };
 
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem('tvmevents-bookmarks') || '[]');
@@ -23,86 +14,95 @@ const EventCard = ({ event }) => {
   }, [event.id]);
 
   const toggleBookmark = (e) => {
-  e.stopPropagation();  // CRITICAL: Block Link click
-  console.log('⭐ CLICKED! ID:', event.id);  // DEBUG
-  let saved = JSON.parse(localStorage.getItem('tvmevents-bookmarks') || '[]');
-  if (isBookmarked) {
-    saved = saved.filter(id => id !== event.id);
-  } else {
-    saved.push(event.id);
-  }
-  localStorage.setItem('tvmevents-bookmarks', JSON.stringify(saved));
-  console.log('⭐ SAVED:', saved);  // DEBUG
-  setIsBookmarked(!isBookmarked);
-};
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('⭐ Toggling:', event.id);
+    const saved = JSON.parse(localStorage.getItem('tvmevents-bookmarks') || '[]');
+    const newSaved = isBookmarked 
+      ? saved.filter(id => id !== event.id) 
+      : [...saved, event.id];
+    localStorage.setItem('tvmevents-bookmarks', JSON.stringify(newSaved));
+    setIsBookmarked(!isBookmarked);
+  };
 
-
-  const formatLocation = (location) => location.split(',')[0];
+  const handleShare = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const shareData = {
+      title: event.title,
+      text: `${event.title} - ${event.location} (${new Date(event.dateStart).toLocaleDateString('en-IN')})`,
+      url: `${window.location.origin}/events/${event.id}`
+    };
+    
+    try {
+      if (navigator.share && navigator.canShare(shareData)) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(shareData.url);
+        console.log('🔗 Link copied!');
+      }
+    } catch (err) {
+      await navigator.clipboard.writeText(shareData.url);
+      console.log('🔗 Fallback copy');
+    }
+  };
 
   return (
-    <div className="group">  {/* Wrapper */}
-      <Link to={`/events/${event.id}`} className="block">
-        <article className="bg-white rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden border border-gray-100">
-          {/* Image */}
-          <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden relative">
-            <img 
-              src={event.image || 'https://images.unsplash.com/photo-1524178232363-5495a95d3f5b?w=500'} 
-              alt={event.title}
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-            />
+    <Link to={`/events/${event.id}`} className="group">
+      <article className="bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden max-w-sm mx-auto">
+        {/* Image */}
+        <img src={event.image || '/api/placeholder/400/250'} alt={event.title} className="w-full h-48 object-cover" />
+        
+        {/* Content */}
+        <div className="p-6">
+          <div className="flex items-start justify-between mb-3">
+            <span className="px-3 py-1 bg-gradient-to-r from-orange-100 to-pink-100 text-orange-700 text-xs font-medium rounded-full">
+              {event.category}
+            </span>
           </div>
           
-          {/* Content */}
-          <div className="p-6">
-            {/* Category */}
-            <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700 mb-4">
-              🏷️ {event.category}
-            </div>
-
-            <h3 className="text-xl font-bold text-gray-900 mb-4 leading-tight hover:text-orange-600 transition-colors line-clamp-2">
-              {event.title}
-            </h3>
-
-            {/* Details */}
-            <div className="space-y-3 mb-6 text-sm text-gray-600">
-              <div className="flex items-center">
-                📅 <span className="ml-2 font-medium">{formatDateRange(event.dateStart)}</span>
-              </div>
-              <div className="flex items-center">
-                📍 <span className="ml-2">{formatLocation(event.location)}</span>
-              </div>
-              {event.price && (
-                <div className="flex items-center">
-                  💰 <span className="ml-2 font-semibold">₹{event.price}</span>
-                </div>
-              )}
-            </div>
-
-            {/* Footer - FIXED BUTTONS */}
-            <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-              <span className="text-xs text-gray-500">👥 {event.rsvps || 0} going</span>
-              <div className="flex items-center gap-3">
-                <button className="px-6 py-2 bg-gradient-to-r from-orange-500 to-pink-500 text-white text-sm font-medium rounded-xl hover:shadow-lg transition-all shadow-md whitespace-nowrap">
-                  View Details →
-                </button>
-                {/* ⭐ STAR BUTTON - PROPERLY CLOSED */}
-                <button
-                  onClick={toggleBookmark}
-                  className="p-2.5 bg-gradient-to-br from-pink-50 to-orange-50 rounded-xl hover:from-pink-100 hover:to-orange-100 active:scale-95 transition-all border border-pink-200/50 hover:border-pink-300 shadow-sm hover:shadow-md flex items-center justify-center group"
-                  title={isBookmarked ? "Remove bookmark" : "Save for later"}
-                >
-                  {isBookmarked ? (
-                    <StarOff className="w-5 h-5 text-pink-500 drop-shadow-sm group-hover:scale-110" />
-                  ) : (
-                    <Star className="w-5 h-5 text-pink-300 group-hover:text-pink-500 group-hover:scale-110 transition-all" />
-                  )}
-                </button>
-              </div>
-            </div>
+          <h3 className="font-bold text-xl mb-2 leading-tight">{event.title}</h3>
+          
+          <p className="text-gray-600 text-sm mb-4 line-clamp-2">{event.description}</p>
+          
+          <div className="flex items-center gap-2 text-xs text-gray-500 mb-6">
+            <time>{new Date(event.dateStart).toLocaleDateString('en-IN')}</time>
+            <span>•</span>
+            <span>{event.location}</span>
           </div>
-        </article>
-      </Link>
-    </div>
+        </div>
+        
+        {/* Footer with STAR + SHARE + RSVP */}
+        <div className="flex items-center justify-between py-4 border-t border-gray-100 mt-4 px-4">
+          <span className="text-sm text-gray-500">👥 {event.rsvps || 0} going</span>
+          <div className="flex items-center gap-3">
+            {/* ⭐ STAR BUTTON */}
+            <button 
+              onClick={toggleBookmark} 
+              className="p-2 rounded-full bg-white hover:bg-pink-50 shadow-sm hover:shadow-md transition-all hover:scale-105 flex items-center justify-center"
+              style={{width:'40px', height:'40px'}}
+              title="Save event"
+            >
+              {isBookmarked ? (
+                <StarIcon className="w-5 h-5 text-pink-500" aria-hidden="true" />
+              ) : (
+                <StarOutlineIcon className="w-5 h-5 text-gray-400 hover:text-pink-500 transition-colors" aria-hidden="true" />
+              )}
+            </button>
+            
+            {/* 🔗 SHARE BUTTON - NEW */}
+            <button 
+              onClick={handleShare}
+              className="p-2 rounded-full bg-white hover:bg-blue-50 shadow-sm hover:shadow-md transition-all hover:scale-105 flex items-center justify-center"
+              style={{width:'40px', height:'40px'}}
+              title="Share event"
+            >
+              <Share className="w-5 h-5 text-gray-400 hover:text-blue-500 transition-colors" />
+            </button>
+          </div>
+        </div>
+      </article>
+    </Link>
   );
 };
 

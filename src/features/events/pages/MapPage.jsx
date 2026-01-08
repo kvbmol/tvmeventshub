@@ -37,7 +37,7 @@ const MapPage = () => {
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">
       <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-slate-900 via-slate-800 to-pink-600 bg-clip-text text-transparent mb-4">
+        <h1 className="text-4xl md:text-5xl font-black bg-linear-to-r from-slate-900 via-slate-800 to-pink-600 bg-clip-text text-transparent mb-4">
           Events Map
         </h1>
         <p className="text-xl text-slate-600">Click markers for event details (Technopark, Kazhakkoottam...)</p>
@@ -51,13 +51,13 @@ const MapPage = () => {
           {events.map((event) => (
             <Marker key={event.id} position={[event.lat, event.lng]}>
               <Popup>
-                <div className="p-4 min-w-[250px]">
+                <div className="p-4 min-w-62.5">
                   <h3 className="font-bold text-lg mb-2">{event.title}</h3>
                   <p className="text-slate-600 mb-2">{event.location}</p>
                   <p className="text-pink-600 font-medium">₹{event.price}</p>
                   <Link
                     to={`/events/${event.id}`}
-                    className="mt-3 block bg-gradient-to-r from-pink-500 to-rose-500 text-white px-4 py-2 rounded-lg text-center hover:shadow-lg transition-all"
+                    className="mt-3 block bg-linear-to-r from-pink-500 to-rose-500 text-white px-4 py-2 rounded-lg text-center hover:shadow-lg transition-all"
                   >
                     View Details
                   </Link>

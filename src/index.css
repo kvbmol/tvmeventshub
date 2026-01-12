@@ -1,27 +1,53 @@
 @import "tailwindcss";
+
+/* FullCalendar Event Styling - CRITICAL FOR EVENTS TO SHOW */
+.fc {
+  --fc-page-bg-color: #f8fafc;
+  --fc-neutral-bg-color: #ffffff;
+  --fc-neutral-text-color: #64748b;
+}
+
+.fc-event {
+  background-color: #10b981 !important;  /* Green for free events */
+  color: white !important;
+  font-weight: 600 !important;
+  font-size: 12px !important;
+  border-radius: 8px !important;
+  border: none !important;
+  padding: 2px 6px !important;
+}
+
+.fc-daygrid-event {
+  margin: 1px !important;
+}
+
+.fc-event-title {
+  display: block !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Paid events = Red */
+.fc-event[title*="₹"] {
+  background-color: #ef4444 !important;
+}
+
+/* Leaflet Map */
 @import "leaflet/dist/leaflet.css";
 #map { height: 100%; width: 100%; }
 
+/* Custom Animations */
 @keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-8px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .animate-slideDown {
   animation: slideDown 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Purple + White Theme */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
+/* Custom CSS Variables */
 :root {
   --purple-50: #f8f7ff;
   --purple-100: #ede9fe;
@@ -31,20 +57,4 @@
   --white: #ffffff;
   --offwhite: #fafbff;
   --slate-900: #0f172a;
-}
-
-* {
-  @apply bg-white/90 backdrop-blur-xl;
-}
-
-.btn-primary {
-  @apply bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold shadow-xl hover:shadow-2xl transition-all rounded-2xl px-6 py-3;
-}
-
-.card {
-  @apply bg-white/95 backdrop-blur-xl shadow-xl hover:shadow-2xl border border-purple-100/50 rounded-3xl;
-}
-
-.badge {
-  @apply bg-gradient-to-r from-purple-100 to-purple-200 text-purple-700 font-bold px-4 py-2 rounded-2xl shadow-md;
 }

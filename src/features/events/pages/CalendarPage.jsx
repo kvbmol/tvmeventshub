@@ -71,17 +71,38 @@ const CalendarPage = () => {
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
       <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-slate-900 via-slate-800 to-pink-600 bg-clip-text text-transparent mb-4">
+        <h1 className="text-4xl md:text-5xl font-black bg-linear-to-r from-slate-900 via-slate-800 to-pink-600 bg-clip-text text-transparent mb-4">
           Event Schedule
         </h1>
         <p className="text-xl text-slate-600 max-w-2xl mx-auto">
           View all upcoming events in a calendar. Click events to see details.
         </p>
       </div>
-      <div className="bg-gradient-to-br from-slate-50 to-white rounded-3xl p-8 shadow-xl">
-        <EventCalendar events={events} />
-      </div>
+     {/* <div className="bg-linear-to-br from-slate-50 to-white rounded-3xl p-8 shadow-xl relative"> */}
+  {/* <style jsx>{`
+    .fc-event {
+      color: white !important;
+      font-weight: 600 !important;
+      font-size: 13px !important;
+      border-radius: 6px !important;
+    }
+    .fc-daygrid-event {
+      margin: 1px 0 !important;
+    }
+    .fc-event-title {
+      display: block !important;
+      white-space: normal !important;
+    }
+  `}</style>
+  <EventCalendar events={events} />
+</div> */}
+
+<div className="bg-linear-to-br from-slate-50 to-white rounded-3xl p-8 shadow-xl relative"> 
+  <EventCalendar events={events} />
+</div>
     </div>
+    
+    
   );
 };
 

@@ -45,7 +45,7 @@ const EventFilters = ({
       {filteredEvents.slice(0, 5).map(event => (
         <div 
           key={event.id} 
-          className="p-3 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-indigo-50/50 cursor-pointer border-b border-slate-100 last:border-b-0 transition-all duration-150 hover:scale-[1.02] hover:shadow-sm"
+          className="p-3 hover:bg-linear-to-r hover:from-blue-50/50 hover:to-indigo-50/50 cursor-pointer border-b border-slate-100 last:border-b-0 transition-all duration-150 hover:scale-[1.02] hover:shadow-sm"
           onMouseDown={() => {
             setSearchQuery(event.title);
             onSearchChange(event.title);

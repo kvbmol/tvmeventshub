@@ -17,7 +17,7 @@ export default function Events() {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Sample events */}
+         
           <div className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200">
             <h3 className="text-xl font-semibold mb-2">Tech Meetup</h3>
             <p className="text-gray-600 mb-4">React workshop</p>

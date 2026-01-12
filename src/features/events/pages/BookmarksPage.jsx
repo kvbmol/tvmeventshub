@@ -1,8 +1,15 @@
+
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const BookmarksPage = () => {
   const [bookmarkedEvents, setBookmarkedEvents] = useState([]);
+
+  // ✅ FIX: Add dependency + sync with localStorage
+  
+
+
   const [allEvents] = useState([
     // Copy your events array from EventList.jsx here exactly
     {
@@ -63,23 +70,37 @@ const BookmarksPage = () => {
   }
     // ... add all 5 events from EventList.jsx
   ]);
+useEffect(() => {
+    const updateBookmarks = () => {
+      const savedIds = JSON.parse(localStorage.getItem('tvmevents-bookmarks') || '[]');
+      const bookmarks = allEvents.filter(event => savedIds.includes(event.id));
+      setBookmarkedEvents(bookmarks);
+    };
+    
+    updateBookmarks();
+    const interval = setInterval(updateBookmarks, 1000);
+    return () => clearInterval(interval);
+  }, []);  // ✅ Empty deps
 
-  useEffect(() => {
+  // ✅ Remove function
+  const removeBookmark = (eventId) => {
     const savedIds = JSON.parse(localStorage.getItem('tvmevents-bookmarks') || '[]');
-    const bookmarks = allEvents.filter(event => savedIds.includes(event.id));
-    setBookmarkedEvents(bookmarks);
-  }, []);
+    const newBookmarks = savedIds.filter(id => id !== eventId);
+    localStorage.setItem('tvmevents-bookmarks', JSON.stringify(newBookmarks));
+  };
+
+  
 
   if (bookmarkedEvents.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-orange-50 py-24 text-center">
+      <div className="min-h-screen bg-linear-to-br from-slate-50 to-orange-50 py-24 text-center">
         <div className="max-w-2xl mx-auto px-4">
           <div className="text-6xl mb-8">⭐</div>
           <h1 className="text-4xl font-black text-slate-900 mb-6">No Bookmarks Yet</h1>
           <p className="text-xl text-slate-600 mb-12">Save events from the Events page to see them here.</p>
           <Link 
-            to="/" 
-            className="inline-block px-8 py-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold rounded-2xl shadow-xl hover:shadow-2xl transition-all"
+            to="/events" 
+            className="inline-block px-8 py-4 bg-linear-to-r from-pink-500 to-rose-500 text-white font-bold rounded-2xl shadow-xl hover:shadow-2xl transition-all"
           >
             Browse Events →
           </Link>
@@ -88,27 +109,38 @@ const BookmarksPage = () => {
     );
   }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-orange-50 py-12">
+ return (
+    <div className="min-h-screen bg-linear-to-br from-slate-50 to-orange-50 py-12">
       <div className="max-w-6xl mx-auto px-4">
-        <h1 className="text-4xl font-black bg-gradient-to-r from-slate-900 to-pink-600 bg-clip-text text-transparent mb-12">
+        <h1 className="text-4xl font-black bg-linear-to-r from-slate-900 to-pink-600 bg-clip-text text-transparent mb-12">
           My Bookmarks ({bookmarkedEvents.length})
         </h1>
         <div className="grid gap-8 md:gap-10 lg:gap-12 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
           {bookmarkedEvents.map(event => (
-            <Link key={event.id} to={`/events/${event.id}`} className="block">
-              <article className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl hover:shadow-3xl p-8 border border-white/50">
+            <div key={event.id} className="relative bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl hover:shadow-3xl p-8 border border-white/50">
+              {/* REMOVE BUTTON */}
+              <button
+                onClick={() => removeBookmark(event.id)}
+                className="absolute top-4 right-4 p-3 bg-red-500/90 hover:bg-red-600 text-black rounded-2xl shadow-lg hover:shadow-xl transition-all text-lg font-bold z-10"
+              >
+                ✕
+              </button>
+              
+              {/* CARD CONTENT */}
+              <Link to={`/events/${event.id}`} className="block">
                 <img src={event.image} alt={event.title} className="w-full h-48 object-cover rounded-2xl mb-6" />
                 <h3 className="text-2xl font-black text-slate-900 mb-4">{event.title}</h3>
                 <p className="text-slate-600 mb-6">{event.location}</p>
                 <div className="flex items-center justify-between">
-                  <span className="text-2xl font-black text-emerald-600">FREE</span>
-                  <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-pink-100 to-rose-100 text-pink-700 font-bold rounded-xl">
+                  <span className="text-2xl font-black text-emerald-600">
+                    {event.price > 0 ? `₹${event.price}` : 'FREE'}
+                  </span>
+                  <div className="flex items-center gap-2 px-4 py-2 bg-linear-to-r from-pink-100 to-rose-100 text-pink-700 font-bold rounded-xl">
                     <span>👥</span> {event.rsvps}
                   </div>
                 </div>
-              </article>
-            </Link>
+              </Link>
+            </div>
           ))}
         </div>
       </div>

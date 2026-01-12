@@ -56,7 +56,7 @@ const EventCard = ({ event }) => {
         {/* Content */}
         <div className="p-6">
           <div className="flex items-start justify-between mb-3">
-            <span className="px-3 py-1 bg-gradient-to-r from-orange-100 to-pink-100 text-orange-700 text-xs font-medium rounded-full">
+            <span className="px-3 py-1 bg-linear-to-r from-orange-100 to-pink-100 text-orange-700 text-xs font-medium rounded-full">
               {event.category}
             </span>
           </div>

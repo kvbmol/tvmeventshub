@@ -17,12 +17,20 @@ const EventCalendar = ({ events }) => {
     <FullCalendar
       plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
       initialView="dayGridMonth"
-      events={events.map(event => ({
-        id: event.id.toString(),
-        title: event.title,
-        start: event.dateStart,
-        extendedProps: { category: event.category, location: event.location, price: event.price }
-      }))}
+    events={events.map(event => ({
+  id: event.id.toString(),
+  title: event.title,
+  start: new Date(event.dateStart),  // ✅ Date object - FullCalendar reads this
+  end: new Date(new Date(event.dateStart).getTime() + 2 * 60 * 60 * 1000),  // +2hrs
+  extendedProps: { 
+    category: event.category, 
+    location: event.location, 
+    price: event.price,
+    rsvps: event.rsvps 
+  }
+}))}
+
+
       eventClick={handleEventClick}
       height="600px"
       headerToolbar={{

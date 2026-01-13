@@ -34,7 +34,7 @@ function Home() {
     <div className="min-h-screen bg-gray-50">
       <section
         className="relative h-90% w-full flex flex-col items-center justify-center border rounded-3xl bg-cover bg-center bg-no-repeat bg-purple-400"
-        style={{ backgroundImage: `url('./src/assets/hero.jpg')` }}
+        style={{ backgroundImage: `url('/hero.jpg')` }}
       >
         <div className="absolute inset-0 bg-linear-gradient-to-b from-purple-900/30 to-purple-900/60 z-0"></div>
 

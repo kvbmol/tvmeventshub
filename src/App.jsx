@@ -1,97 +1,60 @@
-// src/App.jsx - FIXED VERSION
-import React from 'react';
-import { BrowserRouter, Routes, Route, useNavigate, Outlet, Link } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext';  // ← ADD THIS
-import Login from './features/auth/Login';
-import Signup from './features/auth/Signup';
-import EventsPage from './features/events/pages/EventsPage';
-import EventList from './features/events/pages/EventList'; 
-import MapPage from './features/events/pages/MapPage'; 
-import CalendarPage from './features/events/pages/CalendarPage'; 
-import BookmarksPage from './features/events/pages/BookmarksPage';
+import React, { useState } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useNavigate,
+  Outlet,
+  Link,
+} from "react-router-dom";
+import { AuthProvider, useAuth } from "./context/AuthContext"; 
+import Login from "./features/auth/Login";
+import Signup from "./features/auth/Signup";
+import EventsPage from "./features/events/pages/EventsPage";
+import EventList from "./features/events/pages/EventList";
+
+import EventCalendar from "./features/events/components/EventCalendar";
+import CalendarPage from "./features/events/pages/CalendarPage";
+import BookmarksPage from "./features/events/pages/BookmarksPage";
 import Footer from "./layout/Footer";
-import EventDetail from './features/events/pages/EventDetail';
-import { useBookmarksCount } from './hooks/useBookmarks';  
-
-// ✅ FIXED: Navbar OUTSIDE App - PROPER COMPONENT
-function Navbar() {
-  const navigate = useNavigate();
-  const { user, logout } = useAuth();  // ✅ Now works with AuthProvider
-  const bookmarksCount = useBookmarksCount();
-  
-  const handleLogout = async () => {
-    await logout();
-    navigate('/');
-  };
-
-  return (
-    <nav className="bg-white shadow-lg sticky top-0 z-50 border-b">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <div className="shrink-0">
-            <button onClick={() => navigate('/')} className="text-2xl font-bold text-gray-900 hover:text-purple-300">
-              TvmEvents Hub
-            </button>
-          </div>
-
-          {/* Center Nav Items */}
-          <div className="hidden md:flex space-x-8 items-center">
-            <button onClick={() => navigate('/map')} className="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-md text-sm font-medium">
-              🗺️ Map
-            </button>
-            <button onClick={() => navigate('/calendar')} className="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-md text-sm font-medium">
-              📅 Calendar
-            </button>
-            <button onClick={() => navigate('/bookmarks')} className="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-md text-sm font-medium">
-              ⭐ Bookmarks ({bookmarksCount})
-            </button>
-            
-            {/* ✅ FIXED AUTH BUTTONS */}
-            <div className="flex items-center space-x-2">
-              {user ? (
-                <>
-                  <span className="text-sm text-slate-500">Hi, {user.email?.split('@')[0]}</span>
-                  <button
-                    onClick={handleLogout}
-                    className="px-4 py-2 bg-red-500/90 hover:bg-red-600 text-white font-bold rounded-xl text-sm"
-                  >
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <>
-                  <Link to="/login" className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-xl text-sm">
-                    Sign In
-                  </Link>
-                  <Link to="/signup" className="px-4 py-2 bg-white text-slate-800 font-bold rounded-xl text-sm border">
-                    Sign Up
-                  </Link>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    </nav>
-  );
-}
+import EventDetail from "./features/events/pages/EventDetail";
+import Navbar from "./features/events/components/Navbar"; 
+import { useBookmarksCount } from "./hooks/useBookmarks";
 
 function Home() {
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) navigate(`/events?search=${searchTerm}`);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 py-20 text-center">
-        <h2 className="text-5xl text-gray-600 mb-12 max-w-2xl mx-auto">
-          Join events in Thiruvananthapuram
-        </h2>
-        <button 
-          onClick={() => navigate('/events')}
-          className="bg-purple-600 px-12 py-4 rounded-full text-xl font-semibold hover:bg-purple-700 shadow-lg"
-        >
-          Discover Events
-        </button>
-      </div>
+      <section
+        className="relative h-90% w-full flex flex-col items-center justify-center border rounded-3xl bg-cover bg-center bg-no-repeat bg-purple-400"
+        style={{ backgroundImage: `url('./src/assets/hero.jpg')` }}
+      >
+        <div className="absolute inset-0 bg-linear-gradient-to-b from-purple-900/30 to-purple-900/60 z-0"></div>
+
+        <div className="relative z-10 text-center text-white px-6 max-w-4xl mx-auto">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 drop-shadow-xl leading-tight">
+            Welcome to TvmEventsHub
+          </h1>
+          <p className="text-lg md:text-xl mb-10 drop-shadow-lg leading-relaxed">
+            Discover amazing events happening in Thiruvananthapuram
+          </p>
+        </div>
+      </section>
+
+      <section className="py-20 bg-white">
+        <div className="py-12 bg-white">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <EventList />
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
@@ -103,7 +66,7 @@ function Layout() {
       <main className="flex-1">
         <Outlet />
       </main>
-      <Footer /> 
+      <Footer />
     </>
   );
 }
@@ -117,8 +80,9 @@ function AppContent() {
           <Route index element={<EventList />} />
           <Route path=":eventid" element={<EventDetail />} />
         </Route>
-        <Route path="map" element={<MapPage />} />
-        <Route path="calendar" element={<CalendarPage />} />
+
+        <Route path="/calendar" element={<CalendarPage />} />
+
         <Route path="bookmarks" element={<BookmarksPage />} />
       </Route>
       <Route path="/login" element={<Login />} />
@@ -126,11 +90,11 @@ function AppContent() {
     </Routes>
   );
 }
-
 function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>  {/* 🚀 CRITICAL: WRAPS EVERYTHING */}
+      <AuthProvider>
+        {" "}
         <AppContent />
       </AuthProvider>
     </BrowserRouter>

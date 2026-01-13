@@ -1,45 +1,38 @@
-import React from 'react';
-import FullCalendar from '@fullcalendar/react';  // First
-import { useNavigate } from 'react-router-dom';
-import dayGridPlugin from '@fullcalendar/daygrid';  // Plugins after
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import listPlugin from '@fullcalendar/list';
+import React from "react";
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import { useNavigate } from "react-router-dom";
 
-const EventCalendar = ({ events }) => {
+const EventCalendar = ({ events = [] }) => {
   const navigate = useNavigate();
 
-  const handleEventClick = (clickInfo) => {
-    navigate(`/events/${clickInfo.event.id}`);
-  };
+  console.log("Events received:", events);
 
   return (
-    <FullCalendar
-      plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
-      initialView="dayGridMonth"
-    events={events.map(event => ({
-  id: event.id.toString(),
-  title: event.title,
-  start: new Date(event.dateStart),  // ✅ Date object - FullCalendar reads this
-  end: new Date(new Date(event.dateStart).getTime() + 2 * 60 * 60 * 1000),  // +2hrs
-  extendedProps: { 
-    category: event.category, 
-    location: event.location, 
-    price: event.price,
-    rsvps: event.rsvps 
-  }
-}))}
-
-
-      eventClick={handleEventClick}
-      height="600px"
-      headerToolbar={{
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek,listWeek'
-      }}
-      eventDisplay="block"
-    />
+    <div className="p-4 border-2 border-red-500 min-h-150">
+      <div className="w-full h-125">
+        <FullCalendar
+          plugins={[dayGridPlugin, interactionPlugin]}
+          initialView="dayGridMonth"
+          events={events.map((e) => ({
+            id: e.id,
+            title: e.title,
+            start: e.dateStart,
+            end: e.dateEnd,
+          }))}
+          height={500}
+          eventDisplay="block"
+          eventBackgroundColor="#3B82F6"
+          eventBorderColor="#1D4ED8"
+          eventTextColor="white"
+          eventClick={(info) => {
+            console.log("Clicked event ID:", info.event.id);
+            navigate(`/events/${info.event.id}`);
+          }}
+        />
+      </div>
+    </div>
   );
 };
 

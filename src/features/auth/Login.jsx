@@ -40,23 +40,23 @@ export default function Login() {
         Login - TvmEvents Hub
       </h2>
       
-      {/* SMART REDIRECT INFO */}
+     
       {from !== '/events' && (
-        <div style={{
-          background: '#dbeafe', 
-          padding: '12px', 
-          borderRadius: '8px', 
-          marginBottom: '1rem',
-          borderLeft: '4px solid #3b82f6'
-        }}>
+        // <div style={{
+        //   background: '#dbeafe', 
+        //   padding: '12px', 
+        //   borderRadius: '8px', 
+        //   marginBottom: '1rem',
+        //   borderLeft: '4px solid #3b82f6'
+        // }}>
           <p style={{margin: 0, fontSize: '14px'}}>
             You'll return to: <strong>{from.includes('events/') ? 'Event Details' : 'Events'}</strong>
           </p>
-        </div>
+        // </div>
       )}
       
       {/* RED TEST BUTTON */}
-      <button 
+      {/* <button 
         onClick={() => console.log('🔥 TEST WORKS!')}
         style={{
           background: '#ef4444', color: 'white', padding: '12px 24px',
@@ -65,7 +65,7 @@ export default function Login() {
         }}
       >
         TEST BUTTON (Console Check)
-      </button>
+      </button> */}
 
       <form onSubmit={handleSubmit} style={{marginTop: '1rem'}}>
         <input
